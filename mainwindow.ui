@@ -80,10 +80,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0" alignment="Qt::AlignHCenter">
+      <item row="0" column="0" colspan="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>U.B.R.P - UDEV Block Restriction Policies</string>
+         <string>UDEV Block Restriction Policies</string>
         </property>
        </widget>
       </item>
