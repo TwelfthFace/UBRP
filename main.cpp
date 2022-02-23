@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     Device dev;
 
     dev.GetDeviceCount();
-    dev.PrintDevices();
+    //dev.PrintDevices();
 
     //QApplication a(argc, argv);
     //MainWindow w;

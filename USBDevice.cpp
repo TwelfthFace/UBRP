@@ -1,4 +1,4 @@
-#include "USBDevice.h"
+﻿#include "USBDevice.h"
 #include <iostream>
 
 using namespace std;
@@ -15,16 +15,21 @@ Device::Device(){
         cout<<"Get Device Error"<<endl; //there was an error
         exit(1);
     }
+    Device::PrintDevices();
 }
 
 void Device::GetDeviceCount(){
-    cout<<cnt<<" Devices in list."<<endl; //print total number of usb devices
+    cout<<Device::DeviceCount<<" Devices in list."<<endl; //print total number of usb devices
 }
 
 void Device::PrintDevices(){
 
-    libusb_device *dev;
-    int i = 0, j = 0;
+    struct libusb_device *dev;
+    /*const struct libusb_interface *inter;
+    const struct libusb_interface_descriptor *interdesc;
+    const struct libusb_endpoint_descriptor *endpointdesc;*/
+    int i = 0;
+    int devcount = 0;
     uint8_t path[8];
 
     while ((dev = devs[i++]) != NULL) {
@@ -32,22 +37,31 @@ void Device::PrintDevices(){
         int r = libusb_get_device_descriptor(dev, &desc);
         if (r < 0) {
             fprintf(stderr, "failed to get device descriptor");
-            return;
+            exit(EXIT_FAILURE);
         }
-
-        printf("%04x:%04x (bus %d, device %d)",
-            desc.idVendor, desc.idProduct,
-            libusb_get_bus_number(dev), libusb_get_device_address(dev));
-
-        r = libusb_get_port_numbers(dev, path, sizeof(path));
-        if (r > 0) {
-            printf(" /sys/bus/usb/devices/%d-%d", libusb_get_bus_number(dev),path[0]);
-            for (j = 1; j < r; j++)
-                printf("path:::::%d", path[j]);
+        if (desc.bDeviceClass != libusb_class_code::LIBUSB_CLASS_HUB){
+            r = libusb_open(dev, &dev_handle);
+            if(r < 0){
+                fprintf(stderr, "failed to get device");
+                exit(EXIT_FAILURE);
+            }
+            u_char manufacturer[200];
+            u_char product[200];
+            libusb_get_string_descriptor_ascii(dev_handle, desc.iProduct, product, 200);
+            libusb_get_string_descriptor_ascii(dev_handle, desc.iManufacturer, manufacturer, 200);
+            cout << manufacturer << " " << product << " ";
+            printf("%04x:%04x (bus %d, device %d)",
+                desc.idVendor, desc.idProduct,
+                libusb_get_bus_number(dev), libusb_get_device_address(dev));
+            r = libusb_get_port_numbers(dev, path, sizeof(path));
+            if (r > 0) {
+                printf(": /sys/bus/usb/devices/%d-%d", libusb_get_bus_number(dev),path[0]);
+            }
+            devcount++;
+            printf("\n");
         }
-        printf("\n");
-
     }
+    Device::DeviceCount = devcount;
 }
 
 void Device::CloseSession(){
