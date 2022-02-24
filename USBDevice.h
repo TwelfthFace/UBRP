@@ -24,8 +24,8 @@ public:
             }
             return outstring;
         }
-        std::string get_string() const {
-            return std::to_string(this->ProductID).append(":" + std::to_string(this->VendorID).append(" "+this->get_char_array(this->Manufacturer)).append(" " + this->get_char_array(this->Product)));
+        std::string get_string() {
+            return std::to_string(VendorID).append(":" + std::to_string(ProductID).append(" " + this->get_char_array(Manufacturer)).append(", " + get_char_array(Product)));
         }
     };
     std::vector<WorkableDevices> Devices;

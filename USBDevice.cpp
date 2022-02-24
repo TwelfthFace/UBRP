@@ -15,6 +15,7 @@ Device::Device(){
         cout<<"Get Device Error"<<endl; //there was an error
         exit(1);
     }
+    Device::Devices.clear();
     Device::EnumDevices();
 }
 
