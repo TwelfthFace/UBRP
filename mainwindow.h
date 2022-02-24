@@ -13,6 +13,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    void generate_device_items();
     ~MainWindow();
 
 private slots:

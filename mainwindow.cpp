@@ -1,11 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "USBDevice.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    MainWindow::generate_device_items();
 }
 
 MainWindow::~MainWindow()
@@ -13,6 +15,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::generate_device_items(){
+    Device dev;
+    QStringList list;
+
+    for(int i = 0; i < dev.DeviceCount; i++){
+        list.push_back(QString::fromStdString(dev.Devices.at(i).get_string()));
+    }
+    ui->comboBox_AvailableDevices->addItems(list);
+}
 
 void MainWindow::on_pushButton_Add_pressed()
 {
