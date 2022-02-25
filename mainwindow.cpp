@@ -24,7 +24,7 @@ void MainWindow::generate_device_items(){
         list.push_back(QString::fromStdString(dev->Devices.at(i).get_string()));
     }
     ui->comboBox_AvailableDevices->addItems(list);
-    dev->Devices.clear();
+    //dev->Devices.clear();
 }
 
 void MainWindow::on_pushButton_Add_pressed()
@@ -40,4 +40,3 @@ void MainWindow::on_pushButton_Remove_pressed()
     QListWidgetItem *it = ui->listWidget_Whitelist->takeItem(ui->listWidget_Whitelist->currentRow());
     delete it;
 }
-

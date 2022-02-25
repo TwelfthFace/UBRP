@@ -29,7 +29,7 @@ public:
         }
     };
     std::vector<WorkableDevices> Devices;
-    int DeviceCount; // DeviceCounts - excluding hubs;
+    int DeviceCount; // DeviceCount - excluding hubs;
 public:
     Device();
     void GetDeviceCount();
