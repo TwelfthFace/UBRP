@@ -11,7 +11,8 @@ public:
             std::string         VendorID;
             u_char              Manufacturer[100];
             u_char              Product[100];
-            std::string         SysPath = "/sys/bus/usb/devices/";
+            std::string         SysPath     = "/sys/bus/usb/devices/";
+            bool                Authorised  = false;
         public:
             std::string get_char_array(const u_char* arr) const {
                 std::string outstring = "";

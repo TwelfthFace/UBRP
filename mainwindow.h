@@ -19,7 +19,6 @@ public:
 
 private slots:
     void on_pushButton_Add_pressed();
-
     void on_pushButton_Remove_pressed();
 
 private:
