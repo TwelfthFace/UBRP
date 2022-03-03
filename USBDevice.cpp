@@ -1,5 +1,7 @@
-﻿#include "USBDevice.h"
-#include <iostream>
+﻿#include <iostream>
+#include <fmt/format.h>
+#include "USBDevice.h"
+
 
 using namespace std;
 
@@ -48,10 +50,9 @@ void Device::EnumDevices(){
             libusb_get_string_descriptor_ascii(dev_handle, desc.iManufacturer, Devices.at(devcount).Manufacturer, 100);
             libusb_get_port_numbers(dev, path, sizeof(path));
 
-            Devices.at(devcount).VendorID = desc.idVendor;
-            Devices.at(devcount).ProductID = desc.idProduct;
+            Devices.at(devcount).VendorID = fmt::format("{:04x}", desc.idVendor);
+            Devices.at(devcount).ProductID = fmt::format("{:04x}", desc.idProduct);
             Devices.at(devcount).SysPath += std::to_string(libusb_get_bus_number(dev)).append("-" + std::to_string(path[0]));
-
             devcount++;
         }
     }
