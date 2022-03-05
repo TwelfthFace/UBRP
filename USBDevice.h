@@ -5,14 +5,14 @@
 
 class Device {
 public:
-    struct WorkableDevices{
+    struct workable_device{
         public:
-            std::string         ProductID;
-            std::string         VendorID;
-            u_char              Manufacturer[100];
-            u_char              Product[100];
-            std::string         SysPath     = "/sys/bus/usb/devices/";
-            bool                Authorised  = false;
+            std::string         product_id;
+            std::string         vendor_id;
+            u_char              manufacturer[100];
+            u_char              product[100];
+            std::string         sys_path     = "/sys/bus/usb/devices/";
+            bool                authorised  = false;
         public:
             std::string get_char_array(const u_char* arr) const {
                 std::string outstring = "";
@@ -25,17 +25,18 @@ public:
                 }
                 return outstring;
             }
-            std::string get_string() {
-                return VendorID + ":" + ProductID + " " + this->get_char_array(Manufacturer) + ", " + get_char_array(Product);
+            std::string get_string() const {
+                return vendor_id + ":" + product_id + " " + this->get_char_array(manufacturer) + ", " + get_char_array(product);
             }
     };
-    std::vector<WorkableDevices> Devices;
-    int DeviceCount; // DeviceCount - excluding hubs;
+    std::vector<workable_device> devices;
+    int device_count; // DeviceCount - excluding hubs;
 public:
     Device();
-    void GetDeviceCount();
-    void EnumDevices();
-    void CloseSession();
+    void get_device_count();
+    void enumerate_devices();
+    void close_session();
+    Device::workable_device* get_device(Device& dev, const std::string& vendor, const std::string& product);
     ~Device();
 private:
     libusb_device **devs; //pointer to pointer of device, used to retrieve a list of devices

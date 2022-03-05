@@ -2,7 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <USBDevice.h>
+#include "USBDevice.h"
+#include "AuthRule.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,5 +25,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Device *dev;
+    AuthRule *auth;
 };
 #endif // MAINWINDOW_H

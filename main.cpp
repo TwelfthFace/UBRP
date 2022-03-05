@@ -1,11 +1,10 @@
 #include "mainwindow.h"
 #include "AuthRule.h"
 #include <QApplication>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
-    //debug
-    AuthRule rules;
 
     QApplication a(argc, argv);
     MainWindow w;
