@@ -24,7 +24,7 @@ void MainWindow::generate_device_items(){
     ui->comboBox_AvailableDevices->clear();
     ui->listWidget_Whitelist->clear();
     for(int i = 0; i < dev->device_count; i++){
-        if(dev->devices.at(i).authorised == 1){
+        if(dev->devices.at(i).authorised == true){
             ui->listWidget_Whitelist->addItem(QString::fromStdString(dev->devices.at(i).get_string()));
         }else{
             ui->comboBox_AvailableDevices->addItem(QString::fromStdString(dev->devices.at(i).get_string()));

@@ -46,6 +46,7 @@ void AuthRule::remove_rule(const std::string &product, const std::string &vendor
     free(copy);
 
     output << rules;
+    output.close();
     dev.get_device(dev, vendor, product)->authorised = false;
 
 }
