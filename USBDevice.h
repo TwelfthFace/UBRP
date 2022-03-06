@@ -9,14 +9,14 @@ public:
         public:
             std::string         product_id;
             std::string         vendor_id;
-            u_char              manufacturer[100];
-            u_char              product[100];
+            u_char              manufacturer[25];
+            u_char              product[25];
             std::string         sys_path;
             bool                authorised = false;
         public:
             std::string get_char_array(const u_char* arr) const {
                 std::string outstring = "";
-                for(int i = 0; i < 100; i++){
+                for(int i = 0; i < 25; i++){
                     if (arr[i] != '\0'){
                         outstring += arr[i];
                     }else{
@@ -33,9 +33,7 @@ public:
     int device_count; // DeviceCount - excluding hubs;
 public:
     Device();
-    void get_device_count();
     void enumerate_devices();
-    void close_session();
     Device::workable_device* get_device(Device& dev, const std::string& vendor, const std::string& product);
     ~Device();
 private:

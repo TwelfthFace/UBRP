@@ -6,7 +6,6 @@
 using namespace std;
 
 Device::Device(){
-
     int r = libusb_init(&ctx); //initialize a library session
     if(r < 0) {
         cout<<"Init Error "<<r<<endl; //there was an error
@@ -21,12 +20,7 @@ Device::Device(){
     Device::enumerate_devices();
 }
 
-void Device::get_device_count(){
-    cout<<Device::device_count<<" Devices in list."<<endl; //print total number of usb devices
-}
-
 void Device::enumerate_devices(){
-
     struct libusb_device *dev;
     int i = 0;
     int devcount = 0;
@@ -56,7 +50,8 @@ void Device::enumerate_devices(){
             devcount++;
         }
     }
-    Device::device_count = devcount;
+    devices.resize(devcount);
+    Device::device_count = devices.size();
 }
 
 Device::workable_device* Device::get_device(Device& dev, const std::string& vendor, const std::string& product){
@@ -69,11 +64,7 @@ Device::workable_device* Device::get_device(Device& dev, const std::string& vend
     return nullptr;
 }
 
-void Device::close_session(){
-    libusb_exit(ctx); //close the session
-}
-
 Device::~Device(){
     libusb_free_device_list(devs, 1);
-    Device::close_session();
+    libusb_exit(ctx);
 }
