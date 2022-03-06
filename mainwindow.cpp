@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     dev = new Device();
     auth = new AuthRule(*dev);
+    dev->enumerate_devices();
     MainWindow::generate_device_items();
 }
 

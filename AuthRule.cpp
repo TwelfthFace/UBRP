@@ -22,15 +22,18 @@ void AuthRule::create_rule(const std::string &product, const std::string &vendor
 void AuthRule::remove_rule(const std::string &product, const std::string &vendor){
     std::ifstream input(AuthRule::rule_file);
     std::ofstream output;
-    std::string line;
 
     std::string content((std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());
 
     input.open(AuthRule::rule_file);
+
     if(!input.is_open())
         exit(EXIT_FAILURE);
+
     input.close();
+
     output.open(AuthRule::rule_file);
+
     char* copy = strdup(content.c_str());
     char* point = strtok(copy, "\n");
     std::string rules = "";

@@ -52,7 +52,7 @@ void Device::enumerate_devices(){
 
             devices.at(devcount).vendor_id = fmt::format("{:04x}", desc.idVendor);
             devices.at(devcount).product_id = fmt::format("{:04x}", desc.idProduct);
-            devices.at(devcount).sys_path += std::to_string(libusb_get_bus_number(dev)).append("-" + std::to_string(path[0])).append("/authorized");
+            devices.at(devcount).sys_path = "/sys/bus/usb/devices/" + std::to_string(libusb_get_bus_number(dev)) + "-" + std::to_string(path[0]) + "/authorized";
             devcount++;
         }
     }
