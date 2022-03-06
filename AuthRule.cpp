@@ -57,7 +57,7 @@ void AuthRule::remove_rule(const std::string &product, const std::string &vendor
 void AuthRule::enumerate_rules(){
     std::ifstream input;
 
-    input.open(AuthRule::rule_file, std::ios_base::out & std::ios_base::in);
+    input.open(AuthRule::rule_file);
 
     if(input.is_open()){
         std::string line;
