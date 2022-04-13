@@ -9,8 +9,8 @@ public:
         public:
             std::string         product_id;
             std::string         vendor_id;
-            u_char              manufacturer[50];
-            u_char              product[50];
+            u_char              manufacturer[100];
+            u_char              product[100];
             std::string         sys_path;
             bool                authorised = false;
         public:

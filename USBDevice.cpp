@@ -27,7 +27,7 @@ void Device::enumerate_devices(){
     uint8_t path[8];
     devices.resize(Device::cnt);
 
-    while ((dev = devs[i++]) != NULL) {
+    while ((dev = devs[i++]) != nullptr) {
         struct libusb_device_descriptor desc;
         int r = libusb_get_device_descriptor(dev, &desc);
         if (r < 0) {

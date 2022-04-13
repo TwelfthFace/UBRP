@@ -7,10 +7,9 @@ AuthRule::AuthRule(Device& dev) : dev(dev){
 
 void AuthRule::create_rule(const std::string &product, const std::string &vendor, const std::string &syspath){
     std::ofstream output;
+    const std::string templaterule = "ACTION==\"add\", SUBSYSTEM==\"usb\", ATTR{idVendor}==\"" + vendor +"\", ATTR{idProduct}==\"" + product + "\", RUN+=\"/bin/sh -c 'echo 1 > " + syspath + "'\"";
 
     output.open(AuthRule::rule_file, std::ios_base::app);
-
-    const std::string templaterule = "ACTION==\"add\", SUBSYSTEM==\"usb\", ATTR{idVendor}==\"" + vendor +"\", ATTR{idProduct}==\"" + product + "\", RUN+=\"/bin/sh -c 'echo 1 > " + syspath + "'\"";
 
     if(dev.get_device(dev, vendor, product) != nullptr){
         output << templaterule + "\n";
@@ -22,7 +21,6 @@ void AuthRule::create_rule(const std::string &product, const std::string &vendor
 void AuthRule::remove_rule(const std::string &product, const std::string &vendor){
     std::ifstream input(AuthRule::rule_file);
     std::ofstream output;
-
     std::string content((std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());
 
     input.open(AuthRule::rule_file);
@@ -61,12 +59,16 @@ void AuthRule::enumerate_rules(){
 
     if(input.is_open()){
         std::string line;
+
         while (getline(input, line)){
             std::string vendor;
             std::string product;
             AuthRule::get_attr("idVendor", line, vendor);
             AuthRule::get_attr("idProduct", line, product);
-            dev.get_device(dev, vendor, product)->authorised = true;
+            Device::workable_device* device = dev.get_device(dev, vendor, product);
+            if(device != nullptr){
+                device->authorised = true;
+            }
         }
     }
     input.close();
