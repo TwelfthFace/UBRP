@@ -25,7 +25,6 @@ void Device::enumerate_devices(){
     int i = 0;
     int devcount = 0;
     uint8_t path[8];
-    devices.resize(Device::cnt);
 
     while ((dev = devs[i++]) != nullptr) {
         struct libusb_device_descriptor desc;
@@ -40,13 +39,24 @@ void Device::enumerate_devices(){
                 fprintf(stderr, "failed to get device");
                 exit(EXIT_FAILURE);
             }
-            libusb_get_string_descriptor_ascii(dev_handle, desc.iProduct, devices.at(devcount).product, 100);
-            libusb_get_string_descriptor_ascii(dev_handle, desc.iManufacturer, devices.at(devcount).manufacturer, 100);
+
+            Device::workable_device device;
+
+            libusb_get_string_descriptor_ascii(dev_handle, desc.iProduct, device.product, 100);
+            libusb_get_string_descriptor_ascii(dev_handle, desc.iManufacturer, device.manufacturer, 100);
             libusb_get_port_numbers(dev, path, sizeof(path));
 
+            device.product_id = fmt::format("{:04x}", desc.idProduct);
+            device.vendor_id = fmt::format("{:04x}", desc.idVendor);
+            device.sys_path = "/sys/bus/usb/devices/" + std::to_string(libusb_get_bus_number(dev)) + "-" + std::to_string(path[0]) + "/authorized";
+
+            devices.push_back(device);
+
+            /*
             devices.at(devcount).vendor_id = fmt::format("{:04x}", desc.idVendor);
             devices.at(devcount).product_id = fmt::format("{:04x}", desc.idProduct);
             devices.at(devcount).sys_path = "/sys/bus/usb/devices/" + std::to_string(libusb_get_bus_number(dev)) + "-" + std::to_string(path[0]) + "/authorized";
+            */
             devcount++;
         }
     }

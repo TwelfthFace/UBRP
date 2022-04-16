@@ -58,3 +58,11 @@ void MainWindow::on_pushButton_Remove_pressed()
         MainWindow::generate_device_items();
     }
 }
+
+void MainWindow::on_pushRefresh_pressed()
+{
+    dev = new Device();
+    auth = new AuthRule(*dev);
+    MainWindow::generate_device_items();
+}
+
