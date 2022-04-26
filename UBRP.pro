@@ -25,8 +25,10 @@ SOURCES += \
     SMTP/smtpclientbase.cpp \
     SMTP/stringutils.cpp \
     USBDevice.cpp \
+    emailsmtp.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    smpttest.cpp
 
 HEADERS += \
     AuthRule.h \
@@ -51,7 +53,9 @@ HEADERS += \
     SMTP/sslsmtpclient.h \
     SMTP/stringutils.h \
     USBDevice.h \
-    mainwindow.h
+    emailsmtp.h \
+    mainwindow.h \
+    smpttest.h
 
 FORMS += \
     mainwindow.ui
@@ -71,3 +75,7 @@ unix:!macx: PRE_TARGETDEPS += $$PWD/./libsmtpclient.a
 unix:!macx: LIBS += -lusb-1.0
 
 unix:!macx: LIBS += -lfmt
+
+unix:!macx: LIBS += -lssl
+
+unix:!macx: LIBS += -lcrypto

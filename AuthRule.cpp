@@ -18,7 +18,7 @@ void AuthRule::create_rule(const std::string &product, const std::string &vendor
     output.close();
 }
 
-void AuthRule::remove_rule(const std::string &product, const std::string &vendor){
+void AuthRule::remove_rule(const std::string &vendor, const std::string &product){
     std::ifstream input(AuthRule::rule_file);
     std::ofstream output;
     std::string content((std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());

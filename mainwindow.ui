@@ -2,18 +2,10 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>600</height>
-   </rect>
-  </property>
-  <property name="maximumSize">
+  <property name="minimumSize">
    <size>
-    <width>800</width>
-    <height>600</height>
+    <width>774</width>
+    <height>691</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -90,7 +82,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="statusTip">
+    <string/>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
