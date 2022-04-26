@@ -6,14 +6,14 @@ EmailSMTP::EmailSMTP(const bool& action, const char* vendor_id, const char* prod
     client.setCredentials(EmailSMTP::creds);
     try
     {
-        const char* action_word = (action == 1) ? "Authorised" : "Unauthorised";
+        const char* action_word = (action == 1) ? "AUTHORISED" : "UNAUTHORISED";
 
         char body[300] = {'\0'};
 
-        sprintf(body, "<html><h1>UBRP</h1>"
+        sprintf(body, "<html><h1>UBRP - %s</h1>"
                       "<h2>%s</h2>"
                       "<ul><li>Vendor ID: %s</li>"
-                      "<li>Product ID: %s</li><li>Manufacturer: %s</li><li>Product: %s</li></ul></html>", action_word, vendor_id,
+                      "<li>Product ID: %s</li><li>Manufacturer: %s</li><li>Product: %s</li></ul></html>", action_word, action_word, vendor_id,
                 product_id, manufacturer, product);
 
         HTMLMessage msg(MessageAddress(server_email, "UBRP"),
@@ -28,7 +28,6 @@ EmailSMTP::EmailSMTP(const bool& action, const char* vendor_id, const char* prod
                  << " (error no: " << err_no << ")" << '\n';
             std::cerr << "Error: Email Sending Failure... Check Terminal.";
         }
-        std::cout << "Operation completed!" << std::endl;
     }
     catch (std::invalid_argument &err)
     {
