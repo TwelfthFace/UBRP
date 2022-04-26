@@ -71,7 +71,7 @@ void MainWindow::on_pushButton_Remove_pressed()
                        device_selection->get_char_array(device_selection->product).c_str());
 
         statusBar()->showMessage("Email Sent!", 2000);
-        MainWindow::generate_device_items();
+        MainWindow::generate_device_items(); //
     }
 }
 
