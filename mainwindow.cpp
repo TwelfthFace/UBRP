@@ -50,7 +50,7 @@ void MainWindow::on_pushButton_Add_pressed()
                    device_selection->get_char_array(device_selection->manufacturer).c_str(),
                    device_selection->get_char_array(device_selection->product).c_str());
 
-    statusBar()->showMessage("Email Sent!", 1000);
+    statusBar()->showMessage("Email Sent!", 2000);
     MainWindow::generate_device_items();
 }
 
@@ -70,7 +70,7 @@ void MainWindow::on_pushButton_Remove_pressed()
                        device_selection->get_char_array(device_selection->manufacturer).c_str(),
                        device_selection->get_char_array(device_selection->product).c_str());
 
-        statusBar()->showMessage("Email Sent!", 1000);
+        statusBar()->showMessage("Email Sent!", 2000);
         MainWindow::generate_device_items();
     }
 }
