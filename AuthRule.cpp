@@ -63,9 +63,11 @@ void AuthRule::enumerate_rules(){
         while (getline(input, line)){
             std::string vendor;
             std::string product;
+
             AuthRule::get_attr("idVendor", line, vendor);
             AuthRule::get_attr("idProduct", line, product);
             Device::workable_device* device = dev.get_device(dev, vendor, product);
+
             if(device != nullptr){
                 device->authorised = true;
             }

@@ -16,7 +16,7 @@ Device::Device(){
         cout<<"Get Device Error"<<endl; //there was an error
         exit(1);
     }
-    Device::devices.clear();
+
     Device::enumerate_devices();
 }
 
@@ -35,6 +35,7 @@ void Device::enumerate_devices(){
         }
         if (desc.bDeviceClass != libusb_class_code::LIBUSB_CLASS_HUB){
             r = libusb_open(dev, &dev_handle);
+
             if(r < 0){
                 fprintf(stderr, "failed to get device");
                 exit(EXIT_FAILURE);
@@ -52,11 +53,6 @@ void Device::enumerate_devices(){
 
             devices.push_back(device);
 
-            /*
-            devices.at(devcount).vendor_id = fmt::format("{:04x}", desc.idVendor);
-            devices.at(devcount).product_id = fmt::format("{:04x}", desc.idProduct);
-            devices.at(devcount).sys_path = "/sys/bus/usb/devices/" + std::to_string(libusb_get_bus_number(dev)) + "-" + std::to_string(path[0]) + "/authorized";
-            */
             devcount++;
         }
     }

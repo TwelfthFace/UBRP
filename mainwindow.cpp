@@ -23,6 +23,7 @@ MainWindow::~MainWindow()
 void MainWindow::generate_device_items(){
     ui->comboBox_AvailableDevices->clear();
     ui->listWidget_Whitelist->clear();
+
     for(int i = 0; i < dev->device_count; i++){
         if(dev->devices.at(i).authorised == true){
             ui->listWidget_Whitelist->addItem(QString::fromStdString(dev->devices.at(i).get_string()));
@@ -53,6 +54,7 @@ void MainWindow::on_pushButton_Remove_pressed()
     if(ui->listWidget_Whitelist->currentItem()){
         const std::string product = ui->listWidget_Whitelist->currentItem()->text().mid(0,4).toStdString();
         const std::string vendor = ui->listWidget_Whitelist->currentItem()->text().mid(5,4).toStdString();
+
         auth->remove_rule(vendor, product);
         ui->listWidget_Whitelist->takeItem(ui->listWidget_Whitelist->currentRow());
         MainWindow::generate_device_items();
@@ -61,8 +63,11 @@ void MainWindow::on_pushButton_Remove_pressed()
 
 void MainWindow::on_pushRefresh_pressed()
 {
+    delete dev;
+    delete auth;
+
     dev = new Device();
     auth = new AuthRule(*dev);
+
     MainWindow::generate_device_items();
 }
-
