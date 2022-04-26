@@ -6,7 +6,7 @@ EmailSMTP::EmailSMTP(const bool& action, const char* vendor_id, const char* prod
     client.setCredentials(EmailSMTP::creds);
     try
     {
-        const char* action_word = (action == 1) ? "Autherised" : "Unautherised";
+        const char* action_word = (action == 1) ? "Authorised" : "Unauthorised";
 
         char body[300] = {'\0'};
 
