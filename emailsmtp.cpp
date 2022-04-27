@@ -10,15 +10,20 @@ EmailSMTP::EmailSMTP(const bool& action, const char* vendor_id, const char* prod
 
         char body[300] = {'\0'};
 
-        sprintf(body, "<html><h1>UBRP - %s</h1>"
-                      "<h2>%s</h2>"
+        sprintf(body, "<html>"
+                      "<h2>A Device has been %s</h2>"
                       "<ul><li>Vendor ID: %s</li>"
-                      "<li>Product ID: %s</li><li>Manufacturer: %s</li><li>Product: %s</li></ul></html>", action_word, action_word, vendor_id,
-                product_id, manufacturer, product);
+                      "<li>Product ID: %s</li>"
+                      "<li>Manufacturer: %s</li>"
+                      "<li>Product: %s</li></ul>"
+                      "</html>", action_word, vendor_id,
+                        product_id, manufacturer, product);
+        std::string subject = "Device ";
+            subject += action_word;
 
         HTMLMessage msg(MessageAddress(server_email, "UBRP"),
             MessageAddress(admin_email),
-            "UBRP", body);
+            subject.c_str(), body);
 
         int err_no = client.sendMail(msg);
         if (err_no != 0) {
