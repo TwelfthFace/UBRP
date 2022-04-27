@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 #include "USBDevice.h"
 #include "AuthRule.h"
 #include "emailsmtp.h"
@@ -16,6 +17,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    QMessageBox messageBox;
     void generate_device_items();
     ~MainWindow();
 

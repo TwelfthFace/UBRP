@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    messageBox.setFixedSize(500,200);
     dev = new Device();
     auth = new AuthRule(*dev);
     dev->enumerate_devices();
@@ -86,3 +87,9 @@ void MainWindow::on_pushRefresh_pressed()
     statusBar()->showMessage("Refreshed!", 1000);
     MainWindow::generate_device_items();
 }
+
+void MainWindow::on_button_Request_pressed()
+{
+
+}
+

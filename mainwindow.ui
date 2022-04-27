@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>774</width>
+    <height>691</height>
+   </rect>
+  </property>
   <property name="minimumSize">
    <size>
     <width>774</width>
@@ -15,6 +23,9 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
       <item row="2" column="0" colspan="3">
        <widget class="QComboBox" name="comboBox_AvailableDevices"/>
       </item>
@@ -30,13 +41,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item row="7" column="2">
-       <widget class="QPushButton" name="pushButton_Remove">
-        <property name="text">
-         <string>Remove</string>
-        </property>
-       </widget>
       </item>
       <item row="4" column="0">
        <widget class="QPushButton" name="pushRefresh">
@@ -68,7 +72,21 @@
       <item row="6" column="0" colspan="3">
        <widget class="QListWidget" name="listWidget_Whitelist"/>
       </item>
-      <item row="0" column="1">
+      <item row="7" column="0">
+       <widget class="QPushButton" name="button_Request">
+        <property name="text">
+         <string>Request Device History</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2">
+       <widget class="QPushButton" name="pushButton_Remove">
+        <property name="text">
+         <string>Remove</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="3">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>UDEV Block Restriction Policies</string>
