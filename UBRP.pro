@@ -27,7 +27,8 @@ SOURCES += \
     USBDevice.cpp \
     emailsmtp.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    parsedevicehistory.cpp
 
 HEADERS += \
     AuthRule.h \
@@ -53,7 +54,8 @@ HEADERS += \
     SMTP/stringutils.h \
     USBDevice.h \
     emailsmtp.h \
-    mainwindow.h
+    mainwindow.h \
+    parsedevicehistory.h
 
 FORMS += \
     mainwindow.ui
@@ -77,3 +79,5 @@ unix:!macx: LIBS += -lfmt
 unix:!macx: LIBS += -lssl
 
 unix:!macx: LIBS += -lcrypto
+
+unix:!macx: LIBS += -ljsoncpp
