@@ -27,8 +27,7 @@ SOURCES += \
     USBDevice.cpp \
     emailsmtp.cpp \
     main.cpp \
-    mainwindow.cpp \
-    smpttest.cpp
+    mainwindow.cpp
 
 HEADERS += \
     AuthRule.h \
@@ -54,8 +53,7 @@ HEADERS += \
     SMTP/stringutils.h \
     USBDevice.h \
     emailsmtp.h \
-    mainwindow.h \
-    smpttest.h
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui
