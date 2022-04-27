@@ -6,6 +6,7 @@
 #include "USBDevice.h"
 #include "AuthRule.h"
 #include "emailsmtp.h"
+#include "parsedevicehistory.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,6 +26,8 @@ private slots:
     void on_pushButton_Add_pressed();
     void on_pushButton_Remove_pressed();
     void on_pushRefresh_pressed();
+
+    void on_button_Request_pressed();
 
 private:
     Ui::MainWindow *ui;
