@@ -81,3 +81,5 @@ unix:!macx: LIBS += -lssl
 unix:!macx: LIBS += -lcrypto
 
 unix:!macx: LIBS += -ljsoncpp
+
+unix:!macx: LIBS += -lmariadbcpp
