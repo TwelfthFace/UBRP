@@ -25,6 +25,7 @@ SOURCES += \
     SMTP/smtpclientbase.cpp \
     SMTP/stringutils.cpp \
     USBDevice.cpp \
+    dialog.cpp \
     emailsmtp.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -54,12 +55,14 @@ HEADERS += \
     SMTP/sslsmtpclient.h \
     SMTP/stringutils.h \
     USBDevice.h \
+    dialog.h \
     emailsmtp.h \
     mainwindow.h \
     parsedevicehistory.h \
     sqldatabase.h
 
 FORMS += \
+    dialog.ui \
     mainwindow.ui
 
 # Default rules for deployment.

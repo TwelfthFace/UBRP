@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include "dialog.h"
 #include "USBDevice.h"
 #include "AuthRule.h"
 #include "emailsmtp.h"
@@ -30,10 +31,16 @@ private slots:
 
     void on_button_Request_pressed();
 
+    void on_actionConfigure_triggered();
+private:
+    void setup_dialog();
+    void load_config();
 private:
     Ui::MainWindow *ui;
+    Dialog* configwindow;
     Device *dev;
     AuthRule *auth;
+    EmailSMTP *mail;
     SQLDatabase *db;
 };
 #endif // MAINWINDOW_H

@@ -15,4 +15,6 @@ public:
     void enumerate_rules();
     void create_rule(const std::string &product, const std::string &vendor, const std::string &syspath);
     void remove_rule(const std::string &product, const std::string &vendor);
+    std::string get_rule_file_path();
+    void set_rule_file_path(std::string rule_file);
 };

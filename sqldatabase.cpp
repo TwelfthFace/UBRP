@@ -2,19 +2,16 @@
 
 SQLDatabase::SQLDatabase()
 {
-    sql::Driver* driver = sql::mariadb::get_driver_instance();
+    SQLDatabase::try_connect(SQLDatabase::def_url);
+}
 
-    sql::SQLString url("jdbc:mariadb://127.0.0.1:3306/UBRP");
-
-    sql::Properties properties({
-          {"user", "root"},
-          {"password", "qwerty"}
-       });
-
-    SQLDatabase::conn = std::unique_ptr<sql::Connection>(driver->connect(url, properties));
-
-    if (!conn) {
-       std::cerr << "Invalid database connection" << std::endl;
+void SQLDatabase::try_connect(sql::SQLString url){
+    try{
+        SQLDatabase::driver = sql::mariadb::get_driver_instance();
+        SQLDatabase::conn = std::unique_ptr<sql::Connection>(driver->connect(url, properties));
+    } catch (sql::SQLException &e) {
+        std::cerr << "Invalid database connection... " << e.what() << std::endl;
+        conn.release();
     }
 }
 
@@ -86,6 +83,47 @@ const char* SQLDatabase::SQLSelect(){
     }
 }
 
+bool SQLDatabase::SQLIsConnected(){
+    if(SQLDatabase::conn){
+        return true;
+    }
+
+    return false;
+}
+
+sql::SQLString SQLDatabase::get_url(){
+    return SQLDatabase::def_url;
+}
+
+std::string SQLDatabase::get_sql_pass(){
+    return SQLDatabase::def_pass;
+}
+
+std::string SQLDatabase::get_sql_user(){
+    return SQLDatabase::def_user;
+}
+
+void SQLDatabase::set_sql_user(std::string user){
+    SQLDatabase::def_user = user;
+}
+
+void SQLDatabase::set_sql_pass(std::string pass){
+    SQLDatabase::def_pass = pass;
+}
+
+void SQLDatabase::set_url(sql::SQLString url){
+    SQLDatabase::def_url = url;
+}
+
 SQLDatabase::~SQLDatabase(){
-    conn->close();
+    if(SQLDatabase::conn){
+        conn->close();
+    }
+}
+
+void SQLDatabase::set_properties(std::string user, std::string pass){
+    SQLDatabase::properties = {
+        {"user", user.c_str()},
+        {"password", pass.c_str()}
+     };
 }

@@ -76,6 +76,14 @@ void AuthRule::enumerate_rules(){
     input.close();
 }
 
+std::string AuthRule::get_rule_file_path(){
+    return AuthRule::rule_file;
+}
+
+void AuthRule::set_rule_file_path(std::string rule_file){
+    AuthRule::rule_file = rule_file;
+}
+
 void AuthRule::get_attr(const std::string &attr, const std::string &line, std::string &out){
    for(u_long c = attr.size() + 4; line[line.find(attr) + c] != 34; c++){
         out += line[line.find(attr) + c];
