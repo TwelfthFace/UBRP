@@ -28,7 +28,8 @@ SOURCES += \
     emailsmtp.cpp \
     main.cpp \
     mainwindow.cpp \
-    parsedevicehistory.cpp
+    parsedevicehistory.cpp \
+    sqldatabase.cpp
 
 HEADERS += \
     AuthRule.h \
@@ -55,7 +56,8 @@ HEADERS += \
     USBDevice.h \
     emailsmtp.h \
     mainwindow.h \
-    parsedevicehistory.h
+    parsedevicehistory.h \
+    sqldatabase.h
 
 FORMS += \
     mainwindow.ui

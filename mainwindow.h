@@ -7,6 +7,7 @@
 #include "AuthRule.h"
 #include "emailsmtp.h"
 #include "parsedevicehistory.h"
+#include "sqldatabase.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,5 +34,6 @@ private:
     Ui::MainWindow *ui;
     Device *dev;
     AuthRule *auth;
+    SQLDatabase *db;
 };
 #endif // MAINWINDOW_H

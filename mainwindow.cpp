@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
 
@@ -10,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
     messageBox.setFixedSize(500,200);
     dev = new Device();
     auth = new AuthRule(*dev);
+    db = new SQLDatabase();
     dev->enumerate_devices();
+
     MainWindow::generate_device_items();
 }
 
@@ -19,6 +21,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete dev;
     delete auth;
+    delete db;
 }
 
 void MainWindow::generate_device_items(){
@@ -72,7 +75,7 @@ void MainWindow::on_pushButton_Remove_pressed()
                        device_selection->get_char_array(device_selection->product).c_str());
 
         statusBar()->showMessage("Email Sent!", 2000);
-        MainWindow::generate_device_items(); //
+        MainWindow::generate_device_items();
     }
 }
 
@@ -84,12 +87,40 @@ void MainWindow::on_pushRefresh_pressed()
     dev = new Device();
     auth = new AuthRule(*dev);
 
-    statusBar()->showMessage("Refreshed!", 1000);
+    statusBar()->showMessage("Refreshed!", 2000);
     MainWindow::generate_device_items();
 }
 
 void MainWindow::on_button_Request_pressed()
 {
+    std::ifstream json_file("history.json", std::ifstream::binary);
+    if(json_file.good()){
+        Json::Value device_history;
+        ParseDeviceHistory get_history(json_file, device_history);
 
+        for(Json::ArrayIndex i=0; i < device_history.size(); i++){
+            int sqlInsert = db->SQLInsert(device_history[i]["conn"].asString().c_str(), device_history[i]["host"].asString().c_str(),
+                    device_history[i]["vid"].asString().c_str(), device_history[i]["pid"].asString().c_str(),
+                    device_history[i]["prod"].asString().c_str(), device_history[i]["manufact"].asString().c_str(),
+                    device_history[i]["serial"].asString().c_str(), device_history[i]["port"].asString().c_str(),
+                    device_history[i]["disconn"].asString().c_str());
+            if(sqlInsert){
+                messageBox.critical(0, "Insertion Failed" , "Check console for more details.");
+                break;
+            }
+        }
+
+        messageBox.setText("Records Retrieved...");
+        messageBox.setInformativeText("See all records below!");
+        messageBox.setDetailedText(db->SQLSelect());
+        messageBox.setStandardButtons(QMessageBox::Ok);
+        messageBox.setDefaultButton(QMessageBox::Ok);
+        messageBox.setStyleSheet("QLabel{min-width: 600px;}");
+        messageBox.exec();
+
+        json_file.close();
+    }else{
+        messageBox.critical(0, "Missing JSON file.", "File missing './history.json' use USBRIP to generate the history file and place it in the same directory as UBRP.");
+    }
 }
 
