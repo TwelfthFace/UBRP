@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     dev->enumerate_devices();
 
     struct stat buffer;
-    if(stat("/usr/tmp/UBRP_enabled", &buffer) == 0){
+    if(stat("/var/tmp/UBRP_enabled", &buffer) == 0){
         whitelist_enabled = true;
         ui->lbl_whitelist_status->setText("Whitelist Enabled");
     }else{
