@@ -14,8 +14,6 @@ void AuthRule::create_rule(const std::string &product, const std::string &vendor
     if(device != nullptr){
         output << templaterule + "\n";
         device->authorised = true;
-        device->mod_kernel_authentication(true);
-
     }
     output.close();
 }
@@ -53,8 +51,6 @@ void AuthRule::remove_rule(const std::string &vendor, const std::string &product
     output << rules;
     output.close();
     device->authorised = false;
-    device->mod_kernel_authentication(false);
-
 }
 
 void AuthRule::enumerate_rules(){
