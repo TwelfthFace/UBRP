@@ -204,7 +204,8 @@ void MainWindow::on_actionEnable_Whitelist_triggered()
     if(msgans == QMessageBox::Yes && whitelist_enabled == false){
         whitelist_enabled = true;
         ui->lbl_whitelist_status->setText("Whitelist Enabled");
-        std::system("touch /usr/tmp/UBRP_enabled");
+
+        std::system("touch /var/tmp/UBRP_enabled");
         std::system("find /sys/bus/usb/devices/usb*/ -name 'authorized_default' -exec sh -c 'echo 0 > {}' \\;");
         std::system("systemctl enable deauth_usb_inter.service");
         std::system("systemctl enable ubrp_persistence.service");
@@ -228,7 +229,8 @@ void MainWindow::on_actionDisable_Whitelist_triggered()
     if(msgans == QMessageBox::Yes && whitelist_enabled == true){
         whitelist_enabled = false;
         ui->lbl_whitelist_status->setText("Whitelist Disabled");
-        std::system("rm /usr/tmp/UBRP_enabled");
+
+        std::system("rm /var/tmp/UBRP_enabled");
         std::system("find /sys/bus/usb/devices/usb*/ -name 'authorized_default' -exec sh -c 'echo 1 > {}' \\;");
         std::system("systemctl disable deauth_usb_inter.service");
         std::system("systemctl disable ubrp_persistence.service");
