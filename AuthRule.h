@@ -5,8 +5,8 @@
 
 class AuthRule {
 private:
-    //std::string rule_file = "/etc/udev/rules.d/99-usb_auth.rules";
-    std::string rule_file = "/home/danta/99-usb_auth.rules";
+    std::string rule_file = "/etc/udev/rules.d/99-usb_auth.rules";
+    //std::string rule_file = "/home/danta/99-usb_auth.rules";
 private:
     void get_attr(const std::string &attr, const std::string &line, std::string &out);
     Device& dev;

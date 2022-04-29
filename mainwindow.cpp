@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     configwindow = new Dialog(this);
-    messageBox.setFixedSize(500,200);
     dev = new Device();
     auth = new AuthRule(*dev);
     mail = new EmailSMTP();
@@ -66,29 +65,31 @@ void MainWindow::generate_device_items(){
 
 void MainWindow::on_pushButton_Add_pressed()
 {    
-    const std::string vendor = ui->comboBox_AvailableDevices->currentText().mid(0,4).toStdString();
-    const std::string product = ui->comboBox_AvailableDevices->currentText().mid(5,4).toStdString();
-    Device::workable_device* device_selection = dev->get_device(*dev, vendor, product);
+    if(ui->comboBox_AvailableDevices->currentIndex() >= 0){
+        const std::string vendor = ui->comboBox_AvailableDevices->currentText().mid(0,4).toStdString();
+        const std::string product = ui->comboBox_AvailableDevices->currentText().mid(5,4).toStdString();
+        Device::workable_device* device_selection = dev->get_device(*dev, vendor, product);
 
-    ui->listWidget_Whitelist->addItem(ui->comboBox_AvailableDevices->currentText());
+        ui->listWidget_Whitelist->addItem(ui->comboBox_AvailableDevices->currentText());
 
-    if(device_selection != nullptr){
-        auth->create_rule(device_selection->product_id, device_selection->vendor_id, device_selection->sys_path);
+        if(device_selection != nullptr){
+            auth->create_rule(device_selection->product_id, device_selection->vendor_id, device_selection->sys_path);
+        }
+        MainWindow::triggerUDEVRules();
+        int mailr = mail->send_mail(device_selection->authorised, device_selection->vendor_id.c_str(),
+                                   device_selection->product_id.c_str(),
+                                   device_selection->get_char_array(device_selection->manufacturer).c_str(),
+                                   device_selection->get_char_array(device_selection->product).c_str());
+
+        if(mailr == 0)
+        {
+            statusBar()->showMessage("Email Sent!", 2000);
+        }else {
+            statusBar()->showMessage("Email Send Failure!", 2000);
+        }
+
+        MainWindow::generate_device_items();
     }
-
-    int mailr = mail->send_mail(device_selection->authorised, device_selection->vendor_id.c_str(),
-                               device_selection->product_id.c_str(),
-                               device_selection->get_char_array(device_selection->manufacturer).c_str(),
-                               device_selection->get_char_array(device_selection->product).c_str());
-
-    if(mailr == 0)
-    {
-        statusBar()->showMessage("Email Sent!", 2000);
-    }else {
-        statusBar()->showMessage("Email Send Failure!", 2000);
-    }
-
-    MainWindow::generate_device_items();
 }
 
 void MainWindow::on_pushButton_Remove_pressed()
@@ -100,7 +101,7 @@ void MainWindow::on_pushButton_Remove_pressed()
 
         auth->remove_rule(vendor, product);
         ui->listWidget_Whitelist->takeItem(ui->listWidget_Whitelist->currentRow());
-
+        MainWindow::triggerUDEVRules();
         int mailr = mail->send_mail(device_selection->authorised, device_selection->vendor_id.c_str(),
                                    device_selection->product_id.c_str(),
                                    device_selection->get_char_array(device_selection->manufacturer).c_str(),
@@ -170,5 +171,52 @@ void MainWindow::on_button_Request_pressed()
 void MainWindow::on_actionConfigure_triggered()
 {
     MainWindow::setup_dialog();
+}
+
+void MainWindow::triggerUDEVRules(){
+    std::system("udevadm control --reload");
+}
+
+void MainWindow::on_actionEnable_Whitelist_triggered()
+{
+    int msgans = messageBox.question(0, "Enable Whitelist?", "Are you sure you want to enable the whitelist? BE SURE that you have at least one keyboard/mouse whitelisted BEFORE CLICKING YES!"
+                                                " This action could potentially lock you out of your computer, permanently. YOU HAVE BEEN WARNED. Once enabled any device from then on will be, by default,"
+                                                          " unautherised.", QMessageBox::Yes|QMessageBox::No);
+
+    if(msgans == QMessageBox::Yes){
+        std::system("find /sys/bus/usb/devices/usb*/ -name 'authorized_default' -exec sh -c 'echo 0 > {}' \\;");
+        std::system("systemctl enable deauth_usb_inter.service");
+        std::system("systemctl enable ubrp_persistence.service");
+
+        foreach (Device::workable_device device, dev->devices) {
+            if(!device.authorised){
+                device.mod_kernel_authentication(false);
+            }
+        }
+
+        MainWindow::triggerUDEVRules();
+    }
+}
+
+void MainWindow::on_actionDisable_Whitelist_triggered()
+{
+    int msgans = messageBox.question(0, "Disable Whitelist?", "Are you sure you want to disable the whitelist? "
+                                                              "Devices added from then on will be "
+                                                              "autherised by default.", QMessageBox::Yes|QMessageBox::No);
+
+    if(msgans == QMessageBox::Yes){
+        std::system("find /sys/bus/usb/devices/usb*/ -name 'authorized_default' -exec sh -c 'echo 1 > {}' \\;");
+        std::system("systemctl disable deauth_usb_inter.service");
+        std::system("systemctl disable ubrp_persistence.service");
+
+        foreach (Device::workable_device device, dev->devices) {
+            device.authorised = false;
+            auth->remove_rule(device.vendor_id, device.product_id);
+            device.mod_kernel_authentication(true);
+        }
+
+        MainWindow::on_pushRefresh_pressed();
+        MainWindow::triggerUDEVRules();
+    }
 }
 

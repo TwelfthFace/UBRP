@@ -29,6 +29,12 @@ public:
             std::string get_string() const {
                 return vendor_id + ":" + product_id + " " + this->get_char_array(manufacturer) + ", " + get_char_array(product);
             }
+
+            void mod_kernel_authentication(bool authorised){
+                std::string authbit = (authorised) ? "1" : "0";
+                std::string cmd = std::string("echo ").append(std::string(authbit).append(" > ") + sys_path);
+                std::system(cmd.c_str());
+            }
     };
     std::vector<workable_device> devices;
     int device_count; // DeviceCount - excluding hubs;

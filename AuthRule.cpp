@@ -10,10 +10,12 @@ void AuthRule::create_rule(const std::string &product, const std::string &vendor
     const std::string templaterule = "ACTION==\"add\", SUBSYSTEM==\"usb\", ATTR{idVendor}==\"" + vendor +"\", ATTR{idProduct}==\"" + product + "\", RUN+=\"/bin/sh -c 'echo 1 > " + syspath + "'\"";
 
     output.open(AuthRule::rule_file, std::ios_base::app);
-
-    if(dev.get_device(dev, vendor, product) != nullptr){
+    Device::workable_device* device = dev.get_device(dev, vendor, product);
+    if(device != nullptr){
         output << templaterule + "\n";
-        dev.get_device(dev, vendor, product)->authorised = true;
+        device->authorised = true;
+        device->mod_kernel_authentication(true);
+
     }
     output.close();
 }
@@ -32,6 +34,8 @@ void AuthRule::remove_rule(const std::string &vendor, const std::string &product
 
     output.open(AuthRule::rule_file);
 
+    Device::workable_device* device = dev.get_device(dev, vendor, product);
+
     char* copy = strdup(content.c_str());
     char* point = strtok(copy, "\n");
     std::string rules = "";
@@ -48,7 +52,8 @@ void AuthRule::remove_rule(const std::string &vendor, const std::string &product
 
     output << rules;
     output.close();
-    dev.get_device(dev, vendor, product)->authorised = false;
+    device->authorised = false;
+    device->mod_kernel_authentication(false);
 
 }
 
@@ -70,6 +75,7 @@ void AuthRule::enumerate_rules(){
 
             if(device != nullptr){
                 device->authorised = true;
+                device->mod_kernel_authentication(true);
             }
         }
     }

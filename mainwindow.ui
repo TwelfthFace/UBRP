@@ -121,11 +121,29 @@
     <addaction name="separator"/>
     <addaction name="actionConfigure"/>
    </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionEnable_Whitelist"/>
+    <addaction name="actionDisable_Whitelist"/>
+   </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuView"/>
   </widget>
   <action name="actionConfigure">
    <property name="text">
     <string>Configure</string>
+   </property>
+  </action>
+  <action name="actionEnable_Whitelist">
+   <property name="text">
+    <string>Enable Whitelist</string>
+   </property>
+  </action>
+  <action name="actionDisable_Whitelist">
+   <property name="text">
+    <string>Disable Whitelist</string>
    </property>
   </action>
  </widget>
