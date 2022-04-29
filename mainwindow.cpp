@@ -1,6 +1,7 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
+#include <sys/stat.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,6 +14,15 @@ MainWindow::MainWindow(QWidget *parent)
     mail = new EmailSMTP();
     db = new SQLDatabase();
     dev->enumerate_devices();
+
+    struct stat buffer;
+    if(stat("/usr/tmp/UBRP_enabled", &buffer) == 0){
+        whitelist_enabled = true;
+        ui->lbl_whitelist_status->setText("Whitelist Enabled");
+    }else{
+        whitelist_enabled = false;
+        ui->lbl_whitelist_status->setText("Whitelist Disabled");
+    }
 
     MainWindow::generate_device_items();
 }
@@ -74,21 +84,24 @@ void MainWindow::on_pushButton_Add_pressed()
 
         if(device_selection != nullptr){
             auth->create_rule(device_selection->product_id, device_selection->vendor_id, device_selection->sys_path);
-        }
-        MainWindow::triggerUDEVRules();
-        int mailr = mail->send_mail(device_selection->authorised, device_selection->vendor_id.c_str(),
-                                   device_selection->product_id.c_str(),
-                                   device_selection->get_char_array(device_selection->manufacturer).c_str(),
-                                   device_selection->get_char_array(device_selection->product).c_str());
+            MainWindow::triggerUDEVRules();
+            if(whitelist_enabled){
+                device_selection->mod_kernel_authentication(true);
 
-        if(mailr == 0)
-        {
-            statusBar()->showMessage("Email Sent!", 2000);
-        }else {
-            statusBar()->showMessage("Email Send Failure!", 2000);
-        }
+                int mailr = mail->send_mail(device_selection->authorised, device_selection->vendor_id.c_str(),
+                                           device_selection->product_id.c_str(),
+                                           device_selection->get_char_array(device_selection->manufacturer).c_str(),
+                                           device_selection->get_char_array(device_selection->product).c_str());
 
-        MainWindow::generate_device_items();
+                if(mailr == 0)
+                {
+                    statusBar()->showMessage("Email Sent!", 2000);
+                }else {
+                    statusBar()->showMessage("Email Send Failure!", 2000);
+                }
+            }
+            MainWindow::generate_device_items();
+        }
     }
 }
 
@@ -99,21 +112,26 @@ void MainWindow::on_pushButton_Remove_pressed()
         const std::string product = ui->listWidget_Whitelist->currentItem()->text().mid(5,4).toStdString();
         Device::workable_device* device_selection = dev->get_device(*dev, vendor, product);
 
-        auth->remove_rule(vendor, product);
         ui->listWidget_Whitelist->takeItem(ui->listWidget_Whitelist->currentRow());
-        MainWindow::triggerUDEVRules();
-        int mailr = mail->send_mail(device_selection->authorised, device_selection->vendor_id.c_str(),
-                                   device_selection->product_id.c_str(),
-                                   device_selection->get_char_array(device_selection->manufacturer).c_str(),
-                                   device_selection->get_char_array(device_selection->product).c_str());
 
-        if(mailr == 0)
-        {
-            statusBar()->showMessage("Email Sent!", 2000);
-        }else {
-            statusBar()->showMessage("Email Send Failure!", 2000);
+        if(device_selection != nullptr){
+            auth->remove_rule(vendor, product);
+            MainWindow::triggerUDEVRules();
+            if(whitelist_enabled){
+                device_selection->mod_kernel_authentication(false);
+                int mailr = mail->send_mail(device_selection->authorised, device_selection->vendor_id.c_str(),
+                                           device_selection->product_id.c_str(),
+                                           device_selection->get_char_array(device_selection->manufacturer).c_str(),
+                                           device_selection->get_char_array(device_selection->product).c_str());
+
+                if(mailr == 0)
+                {
+                    statusBar()->showMessage("Email Sent!", 2000);
+                }else {
+                    statusBar()->showMessage("Email Send Failure!", 2000);
+                }
+            }
         }
-
         MainWindow::generate_device_items();
     }
 }
@@ -183,7 +201,10 @@ void MainWindow::on_actionEnable_Whitelist_triggered()
                                                 " This action could potentially lock you out of your computer, permanently. YOU HAVE BEEN WARNED. Once enabled any device from then on will be, by default,"
                                                           " unautherised.", QMessageBox::Yes|QMessageBox::No);
 
-    if(msgans == QMessageBox::Yes){
+    if(msgans == QMessageBox::Yes && whitelist_enabled == false){
+        whitelist_enabled = true;
+        ui->lbl_whitelist_status->setText("Whitelist Enabled");
+        std::system("touch /usr/tmp/UBRP_enabled");
         std::system("find /sys/bus/usb/devices/usb*/ -name 'authorized_default' -exec sh -c 'echo 0 > {}' \\;");
         std::system("systemctl enable deauth_usb_inter.service");
         std::system("systemctl enable ubrp_persistence.service");
@@ -204,7 +225,10 @@ void MainWindow::on_actionDisable_Whitelist_triggered()
                                                               "Devices added from then on will be "
                                                               "autherised by default.", QMessageBox::Yes|QMessageBox::No);
 
-    if(msgans == QMessageBox::Yes){
+    if(msgans == QMessageBox::Yes && whitelist_enabled == true){
+        whitelist_enabled = false;
+        ui->lbl_whitelist_status->setText("Whitelist Disabled");
+        std::system("rm /usr/tmp/UBRP_enabled");
         std::system("find /sys/bus/usb/devices/usb*/ -name 'authorized_default' -exec sh -c 'echo 1 > {}' \\;");
         std::system("systemctl disable deauth_usb_inter.service");
         std::system("systemctl disable ubrp_persistence.service");

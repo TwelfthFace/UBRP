@@ -31,13 +31,13 @@ private slots:
     void on_button_Request_pressed();
     void on_actionConfigure_triggered();
     void on_actionEnable_Whitelist_triggered();
-
     void on_actionDisable_Whitelist_triggered();
 
 private:
     void setup_dialog();
     void load_config();
     void triggerUDEVRules();
+
 private:
     Ui::MainWindow *ui;
     Dialog* configwindow;
@@ -45,5 +45,6 @@ private:
     AuthRule *auth;
     EmailSMTP *mail;
     SQLDatabase *db;
+    bool whitelist_enabled;
 };
 #endif // MAINWINDOW_H

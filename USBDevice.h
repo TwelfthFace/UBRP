@@ -32,12 +32,11 @@ public:
 
             void mod_kernel_authentication(bool authorised){
                 std::string authbit = (authorised) ? "1" : "0";
-                std::string cmd = std::string("echo ").append(std::string(authbit).append(" > ") + sys_path);
-                std::system(cmd.c_str());
+                std::system(std::string("echo ").append(std::string(authbit).append(" > ") + sys_path).c_str());
             }
     };
     std::vector<workable_device> devices;
-    int device_count; // DeviceCount - excluding hubs;
+    int device_count; // device_count - excluding hubs;
 public:
     Device();
     void enumerate_devices();
