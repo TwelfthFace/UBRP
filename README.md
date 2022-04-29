@@ -5,8 +5,29 @@ UBRP is a program which will function to authenticate USB devices and is intende
 
 This program was created to prevent bad usb attacks (simular to USBGuard). Although this is an example proof of concept program that shouldn't be employed in a professional enviroment, this program does not come with any warrenty or guarantees.
 
-
 Program must be ran as root to function.
+
+
+#### Dependencies
+```
+build-essential
+qmake
+qtbase5-dev 
+qtchooser 
+qt5-qmake 
+qtbase5-dev-tools
+libusb-1.0-0-dev
+libssl-dev
+libfmt-dev
+libjsoncpp-dev
+libmariadb3 
+libmariadb-dev
+mariadb connector/c++
+```
+```
+apt-get install build-essential qmake qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools libusb-1.0-0-dev libssl-dev libfmt-dev libjsoncpp-dev libmariadb3 libmariadb-dev
+```
+AND **MariaDB Connector/C++**. Download, along with install instructions, [here.](https://mariadb.com/docs/clients/mariadb-connectors/connector-cpp/install/)
 
 #### Compile Instructions:
 ```
@@ -14,7 +35,9 @@ qmake UBRP.pro
 make
 cp ./systemd_service_files/* /etc/systemd/system/
 cp ./UBRP /usr/bin/
+UBRP
 ```
+
 #### Optional:
 ```
 mkdir /etc/UBRP/
