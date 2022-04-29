@@ -96,23 +96,23 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
-       <widget class="QLabel" name="lbl_whitelist_status">
-        <property name="font">
-         <font>
-          <pointsize>16</pointsize>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>Whitelist Disabled!</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
      </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="lbl_whitelist_status">
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+        <italic>true</italic>
+       </font>
+      </property>
+      <property name="text">
+       <string>Whitelist Disabled!</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
