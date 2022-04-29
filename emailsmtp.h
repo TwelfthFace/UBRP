@@ -4,6 +4,7 @@
 #include "SMTP/opportunisticsecuresmtpclient.h"
 #include <memory>
 #include <stdexcept>
+#include <unistd.h>
 
 using namespace jed_utils;
 

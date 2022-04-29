@@ -10,19 +10,25 @@ int EmailSMTP::send_mail(const bool& action, const char* vendor_id, const char* 
     try
     {
         const char* action_word = (action == 1) ? "AUTHORISED" : "UNAUTHORISED";
+        char hostname[HOST_NAME_MAX+1];
+
+        gethostname(hostname, HOST_NAME_MAX+1);
 
         char body[300] = {'\0'};
 
         sprintf(body, "<html>"
                       "<h2>A Device has been %s</h2>"
-                      "<ul><li>Vendor ID: %s</li>"
+                      "<ul><li>Host: %s</li>"
+                      "<li>Vendor ID: %s</li>"
                       "<li>Product ID: %s</li>"
                       "<li>Manufacturer: %s</li>"
                       "<li>Product: %s</li></ul>"
-                      "</html>", action_word, vendor_id,
+                      "</html>", action_word, hostname,vendor_id,
                         product_id, manufacturer, product);
         std::string subject = "Device ";
             subject += action_word;
+            subject += " from host: ";
+            subject += std::string(hostname);
 
         HTMLMessage msg(MessageAddress(server_email, "UBRP"),
             MessageAddress(admin_email.c_str()),
