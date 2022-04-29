@@ -150,7 +150,7 @@ void MainWindow::on_pushRefresh_pressed()
 
 void MainWindow::on_button_Request_pressed()
 {
-    std::ifstream json_file("history.json", std::ifstream::binary);
+    std::ifstream json_file("/etc/UBRP/history.json", std::ifstream::binary);
     if(db->SQLIsConnected()){
         if(json_file.good()){
             Json::Value device_history;
@@ -178,7 +178,7 @@ void MainWindow::on_button_Request_pressed()
 
             json_file.close();
         }else{
-            messageBox.critical(0, "Missing JSON file.", "File missing './history.json' use USBRIP to generate the history file and place it in the same directory as UBRP.");
+            messageBox.critical(0, "Missing JSON file.", "File missing '/etc/UBRP/history.json' use USBRIP to generate the history file and place it in the same directory as UBRP.");
         }
     }else{
         messageBox.critical(0, "Unable to connect to database", "Unable to connect to the database, check console for details.");
