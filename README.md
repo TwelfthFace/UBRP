@@ -12,7 +12,13 @@ Program must be ran as root to function.
 ```
 qmake UBRP.pro
 make
-./UBRP
+cp ./systemd_service_files/* /etc/systemd/system/
+cp ./UBRP /usr/bin/
+```
+#### Optional:
+```
+mkdir /etc/UBRP/
+cp ./example_history.json/* /etc/UBRP/
 ```
 Coded by Jack Daniel
 
