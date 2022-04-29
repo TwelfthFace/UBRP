@@ -1,0 +1,9 @@
+[Unit]
+Description=Deauth USB Devices by default.
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c "find /sys/bus/usb/devices/usb*/ -name 'authorized_default' -exec sh -c 'echo 0 > {}' \\;"
+
+[Install]
+WantedBy=basic.target

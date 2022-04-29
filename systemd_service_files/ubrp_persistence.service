@@ -1,0 +1,10 @@
+[Unit]
+Description=Persist UBPR rules across restarts.
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/UBRP -q
+
+[Install]
+WantedBy=multi-user.target
+
