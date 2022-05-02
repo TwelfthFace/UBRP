@@ -11,7 +11,7 @@ void SQLDatabase::try_connect(sql::SQLString url){
         SQLDatabase::conn = std::unique_ptr<sql::Connection>(driver->connect(url, properties));
     } catch (sql::SQLException &e) {
         std::cerr << "Invalid database connection... " << e.what() << std::endl;
-        conn.release();
+        conn.reset();
     }
 }
 
