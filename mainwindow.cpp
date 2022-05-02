@@ -131,8 +131,8 @@ void MainWindow::on_pushButton_Remove_pressed()
                     statusBar()->showMessage("Email Send Failure!", 2000);
                 }
             }
+            MainWindow::generate_device_items();
         }
-        MainWindow::generate_device_items();
     }
 }
 
