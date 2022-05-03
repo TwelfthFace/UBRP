@@ -9,9 +9,9 @@ private:
     std::unique_ptr<sql::Connection> conn;
     sql::Driver* driver;
 
-    sql::SQLString def_url = "jdbc:mariadb://127.0.0.1:3306/UBRP";
+    sql::SQLString def_url = "jdbc:mariadb://192.168.0.11:3306/UBRP";
 
-    std::string def_user = "root";
+    std::string def_user = "ubrp";
     std::string def_pass = "qwerty";
     sql::Properties properties = {
           {"user", def_user.c_str()},
